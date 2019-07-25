@@ -18,10 +18,63 @@
 <body>
     <div class="container">
         <p id="timer">00:00:00</p>
-
         <div>
             <button id="start_stop" class="btn btn-lg btn-primary">START</button>
         </div>
+        <script>
+
+            //グローバル変数を定義
+            var start
+
+            //ゼロを付ける関数
+            var addZero = function(value){
+                if (value<10){
+                    value = "0"+value;
+                }
+                return value;            
+            }
+
+            var timer_id;
+            //イベントドリブンにする
+            document.getElementById('start_stop').addEventListener('click',function(){
+                if (this.innerHTML == 'START'){
+                    //スタート用インスタンス作成
+                    start = new Date();
+
+                    timer_id = setInterval(goTimer,10);
+
+                    //トグルボタンにする
+                    this.innerHTML = 'STOP';
+                    this.classList.remove('btn-primary');
+                    this.classList.add('btn-danger');
+                } else{
+                    clearInterval(timer_id);
+                    this.innerHTML = 'START';
+                    this.classList.remove('btn-danger');
+                    this.classList.add('btn-primary');
+                }
+            });
+            //タイマー処理
+            var goTimer = function(){
+                //ストップ用インスタンス
+                var now = new Date();
+
+                var milli = now.getTime()-start.getTime();
+                var seconds = Math.floor(milli/1000);
+                var minutes = Math.floor(seconds/60);
+                var hours = Math.floor(minutes/60);
+
+                seconds = seconds - minutes*60;
+                minutes = minutes - hours*60;
+
+                //表示
+                document.getElementById('timer').innerHTML 
+                = addZero(hours) + ':' + addZero(minutes) + ':' + addZero(seconds);
+               
+            }
+
+            
+        </script>
     </div>
 </body>
 </html>
